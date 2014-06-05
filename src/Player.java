@@ -20,7 +20,7 @@ public abstract class Player {
     BufferedImage img = null;
     boolean alive = false;
 
-    boolean up=false;
+    boolean up=false;   //hi ben sentiff sucks
     boolean down=false;
     boolean right=false;
     boolean left=false;
