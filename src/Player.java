@@ -1,17 +1,14 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public abstract class Player {
     int x=0; // x-axis location
     int y=0; // y-axis location
-    int h=0; //
-    int w=0;
+    int h=0; // height
+    int w=0; // width
 
     Grid world=null;
 
@@ -71,16 +68,23 @@ public abstract class Player {
 
         for(int a=0;a<speed;a++){
         left=true;
+        if(!(x>0))
+        left=false;
+        else
         for(int y=this.y;y<this.y+h;y++){
             if(world.getBack()[y][x-1]!=0)
             left=false;
         }
+
         if(left&&xDirection==-1)
             x-=1;
 
 
 
         right=true;
+        if(!(x+w<(world.getBack().length+50)))
+        right=false;
+        else
         for(int y=this.y;y<this.y+h;y++){
             if(world.getBack()[y][x+w]!=0)
             right=false;
@@ -98,7 +102,7 @@ public abstract class Player {
 
     public void jump(){
         if(world.getBack()[y+h][x]!=0){
-        endJump=(int)y-10;
+        endJump=y-10;
         jump=true;
         }
     }
