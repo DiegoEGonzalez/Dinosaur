@@ -25,6 +25,7 @@ public abstract class Terrain{
       }catch (IOException e){
           e.printStackTrace();
       }
+      world.objs.add(this);
       addToWorld();
 
   }
@@ -33,7 +34,7 @@ public abstract class Terrain{
      world.getBack()[y][x]=2;
      for(int y=this.y;y<=this.y+h;y++){
          for(int x=this.x;x<this.x+w;x++){
-             world.getBack()[y][x]=2;
+             world.getBack()[y][x]=world.objs.indexOf(this)+1;
          }
      }
   }
@@ -46,6 +47,10 @@ public abstract class Terrain{
       }
   }
 
+  public void remove(){
+      removeFromWorld();
+      world.objs.remove(world.objs.indexOf(this));
+  }
   public void update(){
       removeFromWorld();
         x-=World.speed;

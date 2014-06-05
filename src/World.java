@@ -1,17 +1,11 @@
-import javax.imageio.ImageIO;
+
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class World {
     public static int speed = 1;
-    public static double gravity = 20;
-    BufferedImage back= null;
-    BufferedImage floor= null;
+    public static double gravity = 2;
     ArrayList<Terrain> bottom = new ArrayList<Terrain>();
-    ArrayList<Terrain> elements = new ArrayList<Terrain>();
     Grid world=null;
 
     public World(Grid world){
@@ -24,8 +18,9 @@ public abstract class World {
         for(int times=0;times<bottom.size();times++){
             bottom.get(times).update();
             if(bottom.get(times).x+bottom.get(times).w<20){
-                bottom.get(times).removeFromWorld();
+                bottom.get(times).remove();
                 bottom.remove(times);
+                times--;
             }
         }
         if(bottom.size()>0&&bottom.get(bottom.size()-1).x<110){

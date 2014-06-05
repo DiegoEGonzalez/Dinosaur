@@ -4,6 +4,7 @@ public class Grid {
 
     private int fore[][]; //foreground layer grid
     private int back[][]; //background layer grid
+    ArrayList<Terrain> objs = new ArrayList<Terrain>();
     public Grid(){
         fore=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+50];
         back=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+50];
