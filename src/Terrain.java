@@ -1,0 +1,60 @@
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public abstract class Terrain{
+  boolean collidable=true;
+  int x;
+  int y;
+  int h;
+  int w;
+  BufferedImage img = null;
+  Grid world=null;
+
+  public Terrain(Grid world, String location,int x, int y) {
+      this.x=x;
+      this.y=y;
+      this.world=world;
+      try{
+          //Declares the img as the one in location
+          img = ImageIO.read(new File(location));
+          h=img.getHeight()/10;
+          w=img.getWidth()/10;
+      }catch (IOException e){
+          e.printStackTrace();
+      }
+      addToWorld();
+
+  }
+
+  public void addToWorld(){
+     world.getBack()[y][x]=2;
+     for(int y=this.y;y<=this.y+h;y++){
+         for(int x=this.x;x<this.x+w;x++){
+             world.getBack()[y][x]=2;
+         }
+     }
+  }
+
+  public void removeFromWorld(){
+      for(int y=this.y;y<=this.y+h;y++){
+          for(int x=this.x;x<this.x+w;x++){
+              world.getBack()[y][x]=0;
+          }
+      }
+  }
+
+  public void update(){
+      removeFromWorld();
+        x-=World.speed;
+      addToWorld();
+  }
+
+  public void draw(Graphics g){
+      g.drawImage(img,x*10,y*10,null);
+      g.setColor(Color.RED);
+      g.drawRect(x*10,y*10,w*10,h*10);
+  }
+}
