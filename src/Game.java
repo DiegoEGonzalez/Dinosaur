@@ -13,29 +13,39 @@ import java.io.IOException;
 
 public class Game extends JPanel{
 
+    //boolean variables to represent keyboard keys, in order to know if they're still pressed down or not.
     private boolean A = false;
     private boolean D = false;
     private boolean W = false;
     private boolean S = false;
 
+    //declaring the main elements !!! IMPORTANT !!!
     test dino;
     Stage1 floor;
-    Grid space;
+    Grid world;
+
+    //variables for the menu
+    int x=420;
+    int dx=-2;
+
+
     public Game(){
 
-        space=new Grid();
-        floor=new Stage1(space);
-        dino = new test(space);
+        world=new Grid();//creates a Grid named world
+        floor=new Stage1(world);//creates a World named floor giving it the grid
+        dino = new test(world);//creates a Dinosaur named dino giving it the grid
 
 
-        setLayout(null);
-        setSize(GameEngine.DEFAULT_WINDOWSIZEX, GameEngine.DEFAULT_WINDOWSIZEY);
-        setBackground(Color.BLUE);
-        setDoubleBuffered(true);
-        setVisible(true);
+        //********** JPANEL SPECIFICS ***********
+        setLayout(null);//designates that the JPanel has no layout and allows us to align elements within it using (x,y)
+        setSize(GameEngine.DEFAULT_WINDOWSIZEX, GameEngine.DEFAULT_WINDOWSIZEY);//set's the size of our JPanel
+        setBackground(new Color(200,10,0));//sets the background color to...
+        setDoubleBuffered(true);//supposed to draw the background as an image and then to the screen in order to improve results, doesn't really
+        setVisible(true);// makes the JPanel visible
 
-        /////////////////// Key Events ////////////////////////////////////////////////////////
-        // ******** A *********
+        //********** KEY EVENTS ******************
+
+        //--------------- A ---------------------
         Action left = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Left.");
@@ -61,7 +71,7 @@ public class Game extends JPanel{
         getActionMap().put("leftReleased",
                 leftReleased);
 
-        // ********* D **********
+        // ---------------- D ---------------------
         Action right = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
 
@@ -88,7 +98,7 @@ public class Game extends JPanel{
         getActionMap().put("rightReleased",
                 rightReleased);
 
-        // ********* W ************
+        // --------------- W -------------------
 
         Action up = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -103,32 +113,59 @@ public class Game extends JPanel{
     }
 
     public void update(){
+        //updates important elements ( called in Main )
         floor.update();
         dino.update();
     }
     public void start(){
 
     }
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        floor.draw(g);
-        g.setColor(Color.LIGHT_GRAY);
-        for(int y=0;y<GameEngine.DEFAULT_WINDOWSIZEY/10;y+=1){
-            for(int x=0;x<GameEngine.DEFAULT_WINDOWSIZEX/10+50;x+=1){
-                if(space.getBack()[y][x]==0)
-                    g.setColor(Color.GREEN);
-                else
-                    g.setColor(Color.RED);
-                g.drawRect(x*10,y*10,10,10);
-            }
-        }
-        dino.draw(g);
+    public void gameover(){
 
-        g.setColor(Color.BLACK);
-        g.drawRect(200,0,GameEngine.DEFAULT_WINDOWSIZEX,GameEngine.DEFAULT_WINDOWSIZEY);
+    }
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);//clears the display
+        drawGame(g);
+    }
+
+    public void drawMenu(Graphics g){
 
         g.setColor(Color.WHITE);
-        g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",220,620);
-        g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes & Ben Sentiff",220,640);
+        g.drawString("Dino Apocalypse", 450, 200);
+        if(x<400)
+            dx=2;
+        if(x>440)
+            dx=-2;
+        x+=dx;
+
+
+        g.drawString("PRESS SPACE TO START !!! ",x,300);
+        g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",300,550);
+    }
+    public void drawGame(Graphics g){
+        floor.draw(g); //draws the world
+
+        // Make seeGrid true in order to see the grid in the game.
+        boolean seeGrid = false;
+        if(seeGrid){
+            g.setColor(Color.LIGHT_GRAY);
+            for(int y=0;y<GameEngine.DEFAULT_WINDOWSIZEY/10;y+=1){
+                for(int x=20;x<(GameEngine.DEFAULT_WINDOWSIZEX/10+20);x+=1){
+                    if(world.getFore()[y][x]==0)
+                        g.setColor(Color.GREEN);// green if there's nothing in the background layer
+                    else
+                        g.setColor(Color.BLUE);// red if there's something there
+                    g.drawRect((x-20)*10,y*10,10,10);// draws the grid square
+                }
+            }
+        }
+
+        dino.draw(g);//draws the player
+
+        g.setColor(Color.WHITE);
+        g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);
+        g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
+        g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes & Ben Sentiff",20,40); // the crew. ;)
+        g.dispose();
     }
 }

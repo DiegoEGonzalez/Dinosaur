@@ -5,25 +5,21 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class Player {
+    final boolean displayHitBox=false;
+
     int x=0; // x-axis location
     int y=0; // y-axis location
     int h=0; // height
     int w=0; // width
 
-    Grid world=null;
-
     int xDirection=0;
     boolean jump=false;
     int endJump;
-
     double speed=0;
+
+    Grid world=null;
     BufferedImage img = null;
     boolean alive = false;
-
-    boolean up=false;   //hi ben sentiff sucks
-    boolean down=false;
-    boolean right=false;
-    boolean left=false;
 
     public Player(Grid world, String location, int x, int y){
         this.world=world;
@@ -39,61 +35,80 @@ public abstract class Player {
         this.y=y;
         alive = true;
     }
+    public boolean up(){ //returns true if nothing above and there's an available space
+        boolean up=true;
+        for(int x=this.x;x<this.x+w;x++){
+            if(world.getBack()[y-1][x]>0)
+                up=false;
+        }
+        return up;
+    }
+    public boolean down(){
+        boolean down=true;
+        if(world.getBack().length<=y+h)
+            down=false;
+        if(down){
+            for(int x=this.x;x<this.x+w;x++){
+                if(world.getBack()[y+h][x]>0)
+                    down=false;
+            }
+        }
+        return down;
+    } //returns true if nothing below and there's an available space
+    public boolean left(){
+        boolean left=true;
+        if(!(x>0))
+            left=false;
+        else
+            for(int y=this.y;y<this.y+h;y++){
+                if(world.getBack()[y][x-1]>0)
+                    left=false;
+            }
+        return left;
+    } //returns true if nothing to the left and there's an available space
+    public boolean right(){
+        boolean right=true;
+        if(!(x+w<(world.getBack().length+50)))
+            right=false;
+        else
+            for(int y=this.y;y<this.y+h;y++){
+                if(world.getBack()[y][x+w]>0)
+                    right=false;
+            }
+        return right;
+    } //returns true if nothing to the right and there's an available space
 
     public void update(){
+        /////// UP ////////
         for(int times=0;times<4;times++){
-        up=true;
-        for(int x=this.x;x<this.x+w;x++){
-            if(world.getBack()[y-1][x]!=0)
-            up=false;
-        }
-        if(up&&jump&&y>endJump)
+        if(up()&&jump&&y>endJump)
             y-=1;
         else
             jump=false;
         }
-
-        ///// DOWN /////
-        down=true;
-        if(world.getBack().length<=y+h)
-            down=false;
-        if(down){
-        for(int x=this.x;x<this.x+w;x++){
-            if(world.getBack()[y+h][x]!=0)
-            down=false;
-        }
-        }
-        if(down)
+        ////// DOWN ///////
+        if(down())
             y+=1;
-
+        ////// LEFT ///////
         for(int a=0;a<speed;a++){
-        left=true;
-        if(!(x>0))
-        left=false;
-        else
-        for(int y=this.y;y<this.y+h;y++){
-            if(world.getBack()[y][x-1]!=0)
-            left=false;
-        }
-
-        if(left&&xDirection==-1)
+        if(left()&&xDirection==-1)
             x-=1;
-
-
-
-        right=true;
-        if(!(x+w<(world.getBack().length+50)))
-        right=false;
-        else
-        for(int y=this.y;y<this.y+h;y++){
-            if(world.getBack()[y][x+w]!=0)
-            right=false;
-        }
-        if(right&&xDirection==1)
+        ////// RIGHT //////
+        if(right()&&xDirection==1)
             x+=1+World.speed;
         }
-        if(left)
+        if(left())
             x-=World.speed;
+
+
+        //////////////////// CHECK IF IT'S ALIVE ////////////////
+        if(x+w<20){
+            alive=false;
+        }   else if(x>20+(GameEngine.DEFAULT_WINDOWSIZEX/10)){
+            alive=false;
+        }   else if(y>20+(GameEngine.DEFAULT_WINDOWSIZEY/10)){
+            alive=false;
+        }
 
     }
     public void move(int xDirection){
@@ -101,30 +116,47 @@ public abstract class Player {
     }
 
     public void jump(){
-        if(world.getBack()[y+h][x]!=0){
+        if(!down()){
         endJump=y-10;
         jump=true;
         }
     }
     public void draw(Graphics g){
-        g.drawImage(img,x*10,y*10,null);
-        g.setColor(Color.RED);
-        g.drawRect(x*10,y*10,w*10,h*10);
+        g.drawImage(img,(x-20)*10,y*10,null);
 
+        if(displayHitBox){
+        g.setColor(Color.RED);
+        g.drawRect((x-20)*10,y*10,w*10,h*10);
+
+        if(!up())
+        g.setColor(Color.WHITE);
+        else
         g.setColor(Color.BLACK);
         for(int x=this.x;x<this.x+w;x++){
-            g.drawRect(x*10,(y-1)*10,10,10);
+            g.drawRect((x-20)*10,(y-1)*10,10,10);
         }
+        if(!down())
+            g.setColor(Color.WHITE);
+        else
+            g.setColor(Color.BLACK);
         for(int x=this.x;x<this.x+w;x++){
-            g.drawRect(x*10,(y+h)*10,10,10);
+            g.drawRect((x-20)*10,(y+h)*10,10,10);
         }
+        if(!left())
+            g.setColor(Color.WHITE);
+        else
+            g.setColor(Color.BLACK);
         for(int y=this.y;y<this.y+h;y++){
-            g.drawRect((x-1)*10,y*10,10,10);
+            g.drawRect((x-21)*10,y*10,10,10);
         }
+        if(!right())
+            g.setColor(Color.WHITE);
+        else
+            g.setColor(Color.BLACK);
         for(int y=this.y;y<this.y+h;y++){
-            g.drawRect((x+w)*10,y*10,10,10);
+            g.drawRect((x+w-20)*10,y*10,10,10);
         }
-
+        }
     }
     public boolean isAlive(){
         return alive;

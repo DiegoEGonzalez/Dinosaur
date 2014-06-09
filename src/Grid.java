@@ -2,12 +2,14 @@ import java.util.ArrayList;
 
 public class Grid {
 
+
     private int fore[][]; //foreground layer grid
     private int back[][]; //background layer grid
-    ArrayList<Terrain> objs = new ArrayList<Terrain>();
+    ArrayList<Terrain> objs = new ArrayList<Terrain>(); //list of all Terrain blocks in play
+    ArrayList<Enemy> enems = new ArrayList<Enemy>(); //list of all enemies in play
     public Grid(){
-        fore=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+50];
-        back=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+50];
+        fore=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+100];
+        back=new int[GameEngine.DEFAULT_WINDOWSIZEY/10+40][GameEngine.DEFAULT_WINDOWSIZEX/10+100];
     }
     public int[][] getBack(){
         return back;

@@ -2,7 +2,7 @@
 public class test extends Player {
 
     test(Grid world){
-        super(world,"src/Dino2.png",10,10);
+        super(world,"src/Dino3.png",40,40);
         speed=2;
     }
 

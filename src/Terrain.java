@@ -34,7 +34,10 @@ public abstract class Terrain{
      world.getBack()[y][x]=2;
      for(int y=this.y;y<=this.y+h;y++){
          for(int x=this.x;x<this.x+w;x++){
-             world.getBack()[y][x]=world.objs.indexOf(this)+1;
+             if(collidable)
+             world.getBack()[y][x]=world.objs.indexOf(this)+1; //if it's a positive index then it's collidable
+             else
+             world.getBack()[y][x]=(world.objs.indexOf(this)+1)*-1; //if it's a negative index # then it's not collidable
          }
      }
   }
@@ -58,8 +61,8 @@ public abstract class Terrain{
   }
 
   public void draw(Graphics g){
-      g.drawImage(img,x*10,y*10,null);
+      g.drawImage(img,(x-20)*10,y*10,null);
       g.setColor(Color.RED);
-      g.drawRect(x*10,y*10,w*10,h*10);
+      //g.drawRect((x-20)*10,y*10,w*10,h*10);
   }
 }
