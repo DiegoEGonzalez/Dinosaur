@@ -165,7 +165,7 @@ public class Game extends JPanel{
         g.setColor(Color.WHITE);
         g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);
         g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
-        g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes & Ben Sentiff",20,40); // the crew. ;)
+        g.drawString("by: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
         g.dispose();
     }
 }

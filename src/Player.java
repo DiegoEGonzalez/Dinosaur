@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class Player {
-    final boolean displayHitBox=false;
+    final boolean displayHitBox=true;
 
     int x=0; // x-axis location
     int y=0; // y-axis location
@@ -117,7 +117,7 @@ public abstract class Player {
 
     public void jump(){
         if(!down()){
-        endJump=y-10;
+        endJump=y-15;
         jump=true;
         }
     }
