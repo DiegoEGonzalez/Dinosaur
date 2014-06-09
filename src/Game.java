@@ -19,6 +19,8 @@ public class Game extends JPanel{
     private boolean W = false;
     private boolean S = false;
 
+    //boolean variable to represent the start button
+    private boolean start = false;
     //declaring the main elements !!! IMPORTANT !!!
     test dino;
     Stage1 floor;
@@ -110,6 +112,17 @@ public class Game extends JPanel{
         getActionMap().put("up",
                 up);
 
+
+         // ---------- SPACE ---------------
+        Action space = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                start = true;
+            }
+        };
+        getInputMap().put(KeyStroke.getKeyStroke("SPACE"),
+                "space");
+        getActionMap().put("space",
+                space);
     }
 
     public void update(){
@@ -125,6 +138,9 @@ public class Game extends JPanel{
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);//clears the display
+        if(!start)
+        drawMenu(g);
+        else
         drawGame(g);
     }
 
