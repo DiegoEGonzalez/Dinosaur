@@ -62,7 +62,7 @@ public abstract class Enemy{
         if(x>0)
         x-=World.speed;
         addToWorld();
-        if(y>(GameEngine.DEFAULT_WINDOWSIZEY)/10+20)
+        if(y>(GameEngine.DEFAULT_WINDOWSIZEY)/10+10)
             alive=false;
     }
 
