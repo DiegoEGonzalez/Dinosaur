@@ -213,11 +213,12 @@ public class Game extends JPanel{
         g.dispose();
     }
     public void drawEnd(Graphics g){
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 60));//changes fot and size
+        g.setFont(getFont("triple_dot_digital-7.ttf",60));
         g.setColor(Color.WHITE);
-        g.drawString("YOU ARE EXTINCT",250,200);//draws title
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        g.drawString("SCORE:" + 69,425,280);//add score method to determine actual score later
-        g.drawString("PRESS SPACE TO RESTART" ,270, 360);
+        g.drawString("YOU ARE",250,180);
+        g.drawString("EXTINCT",260,300);
+        g.setFont(getFont("PressStart2P.ttf",25));
+        g.drawString("SCORE:" + 69,400,390);
+        g.drawString("PRESS SPACE TO RESTART" ,250, 440);
     }
 }
