@@ -13,12 +13,14 @@ public abstract class Enemy{
     int deltaY=0;
     BufferedImage img = null;
     Grid world=null;
+    Player dino=null;
     boolean alive =false;
 
-    public Enemy(Grid world, String location,int x, int y) {
+    public Enemy(Grid world,Player dino, String location,int x, int y) {
         this.x=x;
         this.y=y;
         this.world=world;
+        this.dino=dino;
         try{
             //Declares the img as the one in location
             img = ImageIO.read(new File(location));
@@ -41,7 +43,6 @@ public abstract class Enemy{
             }
         }
     }
-
     public void removeFromWorld(){
         for(int y=this.y;y<=this.y+h;y++){
             for(int x=this.x;x<this.x+w;x++){
@@ -49,26 +50,28 @@ public abstract class Enemy{
             }
         }
     }
-
     public void remove(){
         removeFromWorld();
         world.enems.remove(world.enems.indexOf(this));
     }
+
     public void update(){
+        //removes old position from grid
         removeFromWorld();
+        //applies movement
         x+=deltaX;
         y+=deltaY;
-        if(x>0)
         x-=World.speed;
+        //re-adds it to the grid
         addToWorld();
-        if(y>(GameEngine.DEFAULT_WINDOWSIZEY)/10+10)
+        //checks if it's offscreen
+        if(y>(GameEngine.DEFAULT_WINDOWSIZEY)/10+10||x<20)
             alive=false;
+        //checks if it hit the dinosaur
+        dino.hit();
     }
-
     public void draw(Graphics g){
         g.drawImage(img,x*10-200,y*10-200,null);
-        g.setColor(Color.GREEN);
-        //g.drawRect(x*10-200,y*10-200,w*10,h*10);
     }
 
     public boolean isAlive(){

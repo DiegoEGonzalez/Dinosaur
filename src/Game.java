@@ -1,14 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 
 public class Game extends JPanel{
@@ -16,8 +8,6 @@ public class Game extends JPanel{
     //boolean variables to represent keyboard keys, in order to know if they're still pressed down or not.
     private boolean A = false;
     private boolean D = false;
-    private boolean W = false;
-    private boolean S = false;
 
     //boolean variable to represent the start button
     private boolean start = false;
@@ -37,8 +27,8 @@ public class Game extends JPanel{
     public Game(){
 
         world=new Grid();//creates a Grid named world
-        floor=new Stage1(world);//creates a World named floor giving it the grid
         dino = new test(world);//creates a Dinosaur named dino giving it the grid
+        floor=new Stage1(world,dino);//creates a World named floor giving it the grid
 
 
         //********** JPANEL SPECIFICS ***********
@@ -140,7 +130,7 @@ public class Game extends JPanel{
 
     public void update(){
         //updates important elements ( called in Main )
-        if(start){
+        if(start&&!gameover){
         dino.update();
         floor.update();
         if(!dino.isAlive()){
@@ -164,9 +154,6 @@ public class Game extends JPanel{
             floor.spawnTerrain();// spawns Terrain to fill the floor
         }
         floor.choices=14;
-
-    }
-    public void gameover(){
 
     }
     public void paintComponent(Graphics g){
@@ -215,7 +202,7 @@ public class Game extends JPanel{
             }
         }
 
-        dino.draw(g);//draws the player
+
 
         g.setColor(Color.WHITE);
         g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);

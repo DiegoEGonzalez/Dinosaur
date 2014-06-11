@@ -81,8 +81,32 @@ public abstract class Player {
     } //returns true if nothing to the right and there's an available space
 
     public void hit(){
-        for(int y=this.y;y<=this.y+h;y++){
-            for(int x=this.x;x<this.x+w;x++){
+        //collision testing for body
+        for(int y=this.y+3;y<this.y+h-3;y++){
+            for(int x=this.x+2;x<this.x+w-2;x++){
+                if(world.getFore()[y][x]!=0)
+                    alive=false;
+
+            }
+        }
+        //collision testing for left leg
+        for(int y=this.y+h-3;y<this.y+h;y++){
+            for(int x=this.x+2;x<this.x+3;x++){
+                if(world.getFore()[y][x]!=0)
+                    alive=false;
+            }
+        }
+        //collision testing for right leg
+        for(int y=this.y+h-3;y<this.y+h;y++){
+            for(int x=this.x+7;x<this.x+8;x++){
+                if(world.getFore()[y][x]!=0)
+                    alive=false;
+
+            }
+        }
+        //collision testing for head
+        for(int y=this.y;y<this.y+h-5;y++){
+            for(int x=this.x+7;x<this.x+w;x++){
                 if(world.getFore()[y][x]!=0)
                     alive=false;
 
@@ -99,16 +123,13 @@ public abstract class Player {
             jump=false;
         }
         }
-        hit();
         ////// DOWN ///////
         for(int times=0;times<World.gravity;times++){
         if(down())
             y+=1;
         }
-        hit();
 
-        if(left())
-            x-=World.speed;
+
        if(alive){
         ////// LEFT ///////
         for(int a=0;a<speed;a++){
@@ -120,7 +141,8 @@ public abstract class Player {
             x+=1+World.speed;
 
         }
-           hit();
+           if(left())
+               x-=World.speed;
     }
 
 
@@ -133,6 +155,8 @@ public abstract class Player {
         } else if(y>20+(GameEngine.DEFAULT_WINDOWSIZEY/10)){
             alive=false;
         }
+
+        hit();
 
     }
     public void move(int xDirection){
@@ -199,10 +223,4 @@ public abstract class Player {
         alive=true;
     }
 
-    public int getX(){
-        return x;
-    }
-    public int getY(){
-        return y;
-    }
 }

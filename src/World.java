@@ -4,20 +4,23 @@ import java.util.ArrayList;
 
 public abstract class World {
     public static int speed = 1; //*** DO NOT CHANGE *** ( if you want to make the game faster, go to Main and decrease sleep time )
-    public static double gravity = 2;
+    public static double gravity = 2; //speed at which gravity affects Dino
     ArrayList<Terrain> bottom = new ArrayList<Terrain>();//list for the floor made of Terrain blocks
     ArrayList<Enemy> meteors = new ArrayList<Enemy>();//list of meteors, maybe all the enemies later on but right now only meteors
     Grid world=null;
+    Player dino=null;
     int choices = 5; //amount of cases
 
-    public World(Grid world){
+    public World(Grid world,Player dino){
         this.world=world;//sets world as the Grid
+        this.dino=dino;
         for(int x=0;x<=100;x+=10){
             spawnTerrain();// spawns Terrain to fill the floor
         }
         choices=14;
 
     }
+
     public void update(){
         //goes through all the objects in bottom
         for(int times=0;times<bottom.size();times++){
@@ -102,7 +105,7 @@ public abstract class World {
 
     public void spawnMeteor(){
         //spawns a meteor block ( check x and y, there is a need for a better way to spawn them )
-        meteors.add(new Meteor(world,20+((int)(Math.random()*(GameEngine.DEFAULT_WINDOWSIZEX/10+10)))+2,(int)(Math.random()*20)));
+        meteors.add(new Meteor(world,dino,20+((int)(Math.random()*(GameEngine.DEFAULT_WINDOWSIZEX/10+10)))+2,(int)(Math.random()*20)));
     }
 
     public void draw(Graphics g){
@@ -110,6 +113,8 @@ public abstract class World {
         for(int x=0;x<bottom.size();x++){
             bottom.get(x).draw(g);
         }
+        //draws our lil' dinosaur
+        dino.draw(g);
         //draws the meteors
         for(int x=0;x<meteors.size();x++){
             meteors.get(x).draw(g);
