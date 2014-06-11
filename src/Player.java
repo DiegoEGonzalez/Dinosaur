@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class Player {
-    final boolean displayHitBox=true;
+    final boolean displayHitBox=false;
 
     int x=0; // x-axis location
     int y=0; // y-axis location
@@ -63,6 +63,7 @@ public abstract class Player {
             for(int y=this.y;y<this.y+h;y++){
                 if(world.getBack()[y][x-1]>0)
                     left=false;
+
             }
         return left;
     } //returns true if nothing to the left and there's an available space
@@ -74,6 +75,7 @@ public abstract class Player {
             for(int y=this.y;y<this.y+h;y++){
                 if(world.getBack()[y][x+w]>0)
                     right=false;
+
             }
         return right;
     } //returns true if nothing to the right and there's an available space
@@ -87,8 +89,14 @@ public abstract class Player {
             jump=false;
         }
         ////// DOWN ///////
+        for(int times=0;times<World.gravity;times++){
         if(down())
             y+=1;
+        }
+
+        if(left())
+            x-=World.speed;
+
         ////// LEFT ///////
         for(int a=0;a<speed;a++){
         if(left()&&xDirection==-1)
@@ -97,16 +105,15 @@ public abstract class Player {
         if(right()&&xDirection==1)
             x+=1+World.speed;
         }
-        if(left())
-            x-=World.speed;
+
 
 
         //////////////////// CHECK IF IT'S ALIVE ////////////////
         if(x+w<20){
             alive=false;
-        }   else if(x>20+(GameEngine.DEFAULT_WINDOWSIZEX/10)){
-            alive=false;
-        }   else if(y>20+(GameEngine.DEFAULT_WINDOWSIZEY/10)){
+        } else if(x>20+(GameEngine.DEFAULT_WINDOWSIZEX/10)){
+           alive=false;
+        } else if(y>20+(GameEngine.DEFAULT_WINDOWSIZEY/10)){
             alive=false;
         }
 
@@ -160,6 +167,12 @@ public abstract class Player {
     }
     public boolean isAlive(){
         return alive;
+    }
+
+    public void reset(){
+        x=40;
+        y=40;
+        alive=true;
     }
 
     public int getX(){

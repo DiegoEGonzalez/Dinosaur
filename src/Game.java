@@ -21,6 +21,9 @@ public class Game extends JPanel{
 
     //boolean variable to represent the start button
     private boolean start = false;
+    private boolean gameover = false;
+
+
     //declaring the main elements !!! IMPORTANT !!!
     test dino;
     Stage1 floor;
@@ -116,7 +119,17 @@ public class Game extends JPanel{
          // ---------- SPACE ---------------
         Action space = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                start = true;
+
+                if(!start){
+                    start=true;
+
+                }else if(!gameover){
+                    dino.jump();
+                } else {
+                    reset();
+                    gameover=false;
+                }
+
             }
         };
         getInputMap().put(KeyStroke.getKeyStroke("SPACE"),
@@ -127,10 +140,30 @@ public class Game extends JPanel{
 
     public void update(){
         //updates important elements ( called in Main )
-        floor.update();
+        if(start){
         dino.update();
+        floor.update();
+        if(!dino.isAlive()){
+            gameover=true;
+        }
+        }
     }
     public void start(){
+
+    }
+    public void reset(){
+        dino.reset();
+        floor.choices=5;
+        floor.bottom.clear();
+        floor.meteors.clear();
+        world.clear(world.getBack());
+        world.clear(world.getFore());
+        world.objs.clear();
+        world.enems.clear();
+        for(int x=0;x<=100;x+=10){
+            floor.spawnTerrain();// spawns Terrain to fill the floor
+        }
+        floor.choices=14;
 
     }
     public void gameover(){
@@ -138,10 +171,16 @@ public class Game extends JPanel{
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);//clears the display
+        if(gameover)
+            drawEnd(g);
+
+
         if(!start)
         drawMenu(g);
         else
         drawGame(g);
+
+
     }
 
     public void drawMenu(Graphics g){
@@ -183,5 +222,10 @@ public class Game extends JPanel{
         g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
         g.drawString("by: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
         g.dispose();
+    }
+    public void drawEnd(Graphics g){
+        g.setColor(Color.WHITE);
+        g.drawString("GAME OVER",450,200);
+        g.drawString("Sorry Mike... :(",450,300);
     }
 }

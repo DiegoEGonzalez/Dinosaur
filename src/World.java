@@ -6,20 +6,16 @@ public abstract class World {
     public static int speed = 1; //*** DO NOT CHANGE *** ( if you want to make the game faster, go to Main and decrease sleep time )
     public static double gravity = 2;
     ArrayList<Terrain> bottom = new ArrayList<Terrain>();//list for the floor made of Terrain blocks
-    ArrayList<Terrain> obstacles = new ArrayList<Terrain>();//list of objects that are obstacles ( Terrain blocks on top of the floor )
     ArrayList<Enemy> meteors = new ArrayList<Enemy>();//list of meteors, maybe all the enemies later on but right now only meteors
     Grid world=null;
     int choices = 5; //amount of cases
 
     public World(Grid world){
         this.world=world;//sets world as the Grid
-
         for(int x=0;x<=100;x+=10){
             spawnTerrain();// spawns Terrain to fill the floor
         }
         choices=14;
-
-
 
     }
     public void update(){
@@ -36,10 +32,6 @@ public abstract class World {
             spawnTerrain();// if there's not enough elements to fill the screen, create more
         }
 
-        for(int x=0;x<obstacles.size();x++){
-            obstacles.get(x).update();// updates obstacles
-        }
-
         for(int x=0;x<meteors.size();x++){ //goes through all the meteors
             meteors.get(x).update();//updates them
             if(!meteors.get(x).isAlive()){ //if they're dead, eliminates them.
@@ -53,10 +45,8 @@ public abstract class World {
     }
 
     public void spawnTerrain(){
-
-
         switch((int)(Math.random()*choices)){
-            // 5/6 times, it will generate a ground block
+            // 10/14 times, it will generate a ground block
             case 0:
             case 1:
             case 2:
@@ -72,7 +62,7 @@ public abstract class World {
                 else
                     bottom.add(new Ground(world,20));
                 break;
-            // 1/6 times, it will generate a lava block
+            // 1/14 times, it will generate a lava block
             case 10:
                 if(bottom.size()>0){
                     if((bottom.get(bottom.size()-2) instanceof Water))
@@ -84,7 +74,7 @@ public abstract class World {
                     bottom.add(new Lava(world,20));
                 }
                 break;
-            // 1/6 times, it will generate a lava block
+            // 3/14 times, it will generate a water block
             case 11:
             case 12:
             case 13:
@@ -92,8 +82,9 @@ public abstract class World {
                     if((bottom.get(bottom.size()-2) instanceof Lava))
                         bottom.add(new Ground(world,bottom.get(bottom.size()-1).x+10));
                     bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10));
-                    if(!(bottom.get(bottom.size()-2) instanceof Water))
+                    if(!(bottom.get(bottom.size()-2) instanceof Water)){
                         bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10));
+                    }
                 }else{
                     bottom.add(new Water(world,20));
                 }
@@ -118,10 +109,6 @@ public abstract class World {
         //draws the floor
         for(int x=0;x<bottom.size();x++){
             bottom.get(x).draw(g);
-        }
-        //draws the obstacles
-        for(int x=0;x<obstacles.size();x++){
-            obstacles.get(x).draw(g);
         }
         //draws the meteors
         for(int x=0;x<meteors.size();x++){
