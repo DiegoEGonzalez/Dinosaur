@@ -61,7 +61,7 @@ public abstract class Terrain{
   }
 
   public void draw(Graphics g){
-      g.drawImage(img,(x-20)*10,y*10,null);
+      g.drawImage(img,(x-20)*10,(y-20)*10,null);
       g.setColor(Color.RED);
       //g.drawRect((x-20)*10,y*10,w*10,h*10);
   }

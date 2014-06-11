@@ -204,13 +204,13 @@ public class Game extends JPanel{
         boolean seeGrid = false;
         if(seeGrid){
             g.setColor(Color.LIGHT_GRAY);
-            for(int y=0;y<GameEngine.DEFAULT_WINDOWSIZEY/10;y+=1){
+            for(int y=20;y<GameEngine.DEFAULT_WINDOWSIZEY/10+20;y+=1){
                 for(int x=20;x<(GameEngine.DEFAULT_WINDOWSIZEX/10+20);x+=1){
                     if(world.getFore()[y][x]==0)
                         g.setColor(Color.GREEN);// green if there's nothing in the background layer
                     else
                         g.setColor(Color.BLUE);// red if there's something there
-                    g.drawRect((x-20)*10,y*10,10,10);// draws the grid square
+                    g.drawRect((x-20)*10,(y-20)*10,10,10);// draws the grid square
                 }
             }
         }

@@ -32,7 +32,7 @@ public abstract class Player {
             e.printStackTrace();
         }
         this.x=x+20;
-        this.y=y;
+        this.y=y+20;
         alive = true;
     }
     public boolean up(){ //returns true if nothing above and there's an available space
@@ -45,7 +45,7 @@ public abstract class Player {
     }
     public boolean down(){
         boolean down=true;
-        if(world.getBack().length<=y+h)
+        if(world.getBack().length<=y+h+1)
             down=false;
         if(down){
             for(int x=this.x;x<this.x+w;x++){
@@ -80,7 +80,17 @@ public abstract class Player {
         return right;
     } //returns true if nothing to the right and there's an available space
 
+    public void hit(){
+        for(int y=this.y;y<=this.y+h;y++){
+            for(int x=this.x;x<this.x+w;x++){
+                if(world.getFore()[y][x]!=0)
+                    alive=false;
+
+            }
+        }
+    }
     public void update(){
+        if(alive){
         /////// UP ////////
         for(int times=0;times<4;times++){
         if(up()&&jump&&y>endJump)
@@ -88,23 +98,30 @@ public abstract class Player {
         else
             jump=false;
         }
+        }
+        hit();
         ////// DOWN ///////
         for(int times=0;times<World.gravity;times++){
         if(down())
             y+=1;
         }
+        hit();
 
         if(left())
             x-=World.speed;
-
+       if(alive){
         ////// LEFT ///////
         for(int a=0;a<speed;a++){
         if(left()&&xDirection==-1)
             x-=1;
+
         ////// RIGHT //////
         if(right()&&xDirection==1)
             x+=1+World.speed;
+
         }
+           hit();
+    }
 
 
 
@@ -129,7 +146,8 @@ public abstract class Player {
         }
     }
     public void draw(Graphics g){
-        g.drawImage(img,(x-20)*10,y*10,null);
+        g.drawImage(img,(x-20)*10,(y-20)*10,null);
+
 
         if(displayHitBox){
         g.setColor(Color.RED);
@@ -164,6 +182,12 @@ public abstract class Player {
             g.drawRect((x+w-20)*10,y*10,10,10);
         }
         }
+
+
+
+
+
+
     }
     public boolean isAlive(){
         return alive;

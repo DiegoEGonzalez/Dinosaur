@@ -45,7 +45,7 @@ public abstract class Enemy{
     public void removeFromWorld(){
         for(int y=this.y;y<=this.y+h;y++){
             for(int x=this.x;x<this.x+w;x++){
-                world.getBack()[y][x]=0;
+                world.getFore()[y][x]=0;
             }
         }
     }
@@ -56,7 +56,6 @@ public abstract class Enemy{
     }
     public void update(){
         removeFromWorld();
-
         x+=deltaX;
         y+=deltaY;
         if(x>0)
