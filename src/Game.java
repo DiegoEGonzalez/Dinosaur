@@ -20,7 +20,7 @@ public class Game extends JPanel{
     Grid world;
 
     //variables for the menu
-    int x=420;
+    int x=300;
     int dx=-2;
 
 
@@ -173,16 +173,18 @@ public class Game extends JPanel{
     public void drawMenu(Graphics g){
 
         g.setColor(Color.WHITE);
-        g.drawString("Dino Apocalypse", 450, 200);
-        if(x<400)
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 70));
+        g.drawString("DINO APOCALYPSE", 180, 200);
+        if(x<275)
             dx=2;
-        if(x>440)
+        if(x>300)
             dx=-2;
         x+=dx;
 
-
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
         g.drawString("PRESS SPACE TO START !!! ",x,300);
-        g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",300,550);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",240,550);
     }
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
@@ -211,8 +213,11 @@ public class Game extends JPanel{
         g.dispose();
     }
     public void drawEnd(Graphics g){
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 60));//changes fot and size
         g.setColor(Color.WHITE);
-        g.drawString("GAME OVER",450,200);
-        g.drawString("Sorry Mike... :(",450,300);
+        g.drawString("YOU ARE EXTINCT",250,200);//draws title
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+        g.drawString("SCORE:" + 69,425,280);//add score method to determine actual score later
+        g.drawString("PRESS SPACE TO RESTART" ,270, 360);
     }
 }
