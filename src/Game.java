@@ -169,6 +169,19 @@ public class Game extends JPanel{
 
 
     }
+    public Font getFont(String name, int size){
+        Font font = null;
+        try{
+        InputStream is = getClass().getResourceAsStream(name);
+        font = Font.createFont(Font.TRUETYPE_FONT,is);
+        font = font.deriveFont(Font.PLAIN,size);
+        } catch (FontFormatException e){
+        System.out.println("Font format exception");
+        } catch (IOException e){
+        System.out.println("IO Exception from font");
+        }
+        return font;
+    }
 
     public void drawMenu(Graphics g){
 
