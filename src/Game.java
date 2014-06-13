@@ -20,7 +20,7 @@ public class Game extends JPanel{
     Grid world;
 
     //variables for the menu
-    int x=300;
+    int x=225;
     int dx=-2;
 
 
@@ -186,18 +186,19 @@ public class Game extends JPanel{
     public void drawMenu(Graphics g){
 
         g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 70));
-        g.drawString("DINO APOCALYPSE", 180, 200);
-        if(x<275)
+        g.setFont(getFont("triple_dot_digital-7.ttf",70));
+        g.drawString("DINO", 325, 125);
+        g.drawString("APOCALYPSE", 75, 275);
+        if(x<200)
             dx=2;
-        if(x>300)
+        if(x>225)
             dx=-2;
         x+=dx;
-
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
-        g.drawString("PRESS SPACE TO START !!! ",x,300);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-        g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",240,550);
+        
+        g.setFont(getFont("PressStart2P.ttf",25));
+        g.drawString("PRESS SPACE TO START !!! ",x,400);
+        g.setFont(getFont("PressStart2P.ttf",12));
+        g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",110,550);
     }
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
@@ -220,16 +221,17 @@ public class Game extends JPanel{
 
 
         g.setColor(Color.WHITE);
+        g.setFont(getFont("PressStart2P.ttf",11));
         g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);
         g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
-        g.drawString("by: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
+        g.drawString("By: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
         g.dispose();
     }
     public void drawEnd(Graphics g){
-        g.setFont(getFont("triple_dot_digital-7.ttf",60));
+        g.setFont(getFont("triple_dot_digital-7.ttf",70));
         g.setColor(Color.WHITE);
-        g.drawString("YOU ARE",250,180);
-        g.drawString("EXTINCT",260,300);
+        g.drawString("YOU ARE",230,180);
+        g.drawString("EXTINCT",230,300);
         g.setFont(getFont("PressStart2P.ttf",25));
         g.drawString("SCORE:" + 69,400,390);
         g.drawString("PRESS SPACE TO RESTART" ,250, 440);
