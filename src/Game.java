@@ -13,6 +13,13 @@ public class Game extends JPanel{
     private boolean start = false;
     private boolean gameover = false;
 
+    Font fscore = getFont("PressStart2P.ttf",25);
+    Font fmenu = getFont("triple_dot_digital-7.ttf",70);
+    Font fgameover = getFont("triple_dot_digital-7.ttf",70);
+    Font fscoreover = getFont("PressStart2P.ttf",25);
+    Font fmenu2 = getFont("PressStart2P.ttf",25);
+    Font fmenu3 = getFont("PressStart2P.ttf",12);
+
 
     //declaring the main elements !!! IMPORTANT !!!
     test dino;
@@ -182,17 +189,19 @@ public class Game extends JPanel{
      }
      public void paintComponent(Graphics g){
          super.paintComponent(g);//clears the display
-         if(gameover)
-             drawEnd(g);
- 
+
  
          if(!start)
          drawMenu(g);
          else
          drawGame(g);
- 
 
-    }
+         if(gameover)
+             drawEnd(g);
+
+
+
+     }
      public Font getFont(String name, int size){
          Font font = null;
          try{
@@ -211,60 +220,41 @@ public class Game extends JPanel{
         		
  
      public void drawMenu(Graphics g){
-    	 g.setColor(Color.WHITE);
-         g.setFont(getFont("triple_dot_digital-7.ttf",70));
-         g.drawString("DINO", 325, 125);
-         g.drawString("APOCALYPSE", 75, 275);
+
+         g.setColor(Color.WHITE);
+         g.drawString("v 1.0",900,550);
+         g.setFont(fmenu);
+         g.drawString("DINO", 325, 145);
+         g.drawString("APOCALYPSE", 75, 295);
          if(x<200)
              dx=2;
          if(x>225)
              dx=-2;
          x+=dx;
          
-         g.setFont(getFont("PressStart2P.ttf",25));
+         g.setFont(fmenu2);
          g.drawString("PRESS SPACE TO START !!! ",x,400);
-         g.setFont(getFont("PressStart2P.ttf",12));
-         g.drawString("by: Diego Gonzalez, Mike Roome, Ben Sentiff and Christian Illes",110,550);
+         g.setFont(fmenu3);
+         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff",110,550);
     	      }
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
-
-        // Make seeGrid true in order to see the grid in the game.
-        boolean seeGrid = false;
-        if(seeGrid){
-            g.setColor(Color.LIGHT_GRAY);
-            for(int y=20;y<GameEngine.DEFAULT_WINDOWSIZEY/10+20;y+=1){
-                for(int x=20;x<(GameEngine.DEFAULT_WINDOWSIZEX/10+20);x+=1){
-                    if(world.getFore()[y][x]==0)
-                        g.setColor(Color.GREEN);// green if there's nothing in the background layer
-                    else
-                        g.setColor(Color.BLUE);// red if there's something there
-                    g.drawRect((x-20)*10,(y-20)*10,10,10);// draws the grid square
-                }
-            }
-        }
-
-
-
-        g.setColor(Color.WHITE);
-        g.setFont(getFont("PressStart2P.ttf",11));
-        g.drawString("DINO RUNNER GAME DEVELOPMENT VERSION",20,20);
-        g.drawString("DINOSAUR STATUS: "+dino.isAlive(),700,20); // prints true if alive, otherwise false
-        g.drawString("By: Diego Gonzalez, Mike Roome Christian Illes & Ben Sentiff",20,40); // the crew. ;)
                 if(dino.isAlive())
         	         {
-                	    g.setFont(getFont("PressStart2P.ttf",25));
-        	         	g.drawString(((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000))),445,150);
+                        g.setColor(Color.WHITE);
+                	    g.setFont(fscore);
+        	         	g.drawString(((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000))),445,100);
         	         }
 
     }
     public void drawEnd(Graphics g){
-        g.setFont(getFont("triple_dot_digital-7.ttf",70));
+        g.setFont(fgameover);
         g.setColor(Color.WHITE);
         g.drawString("YOU ARE",230,180);
         g.drawString("EXTINCT",230,300);
-        g.setFont(getFont("PressStart2P.ttf",25));
+        g.setFont(fscoreover);
         g.drawString("SCORE:" + endTime + " sec",335,390);
         g.drawString("PRESS SPACE TO RESTART" ,250, 440);
     }
+
 }
