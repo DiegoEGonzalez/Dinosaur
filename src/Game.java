@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Game extends JPanel{
 
@@ -13,12 +16,12 @@ public class Game extends JPanel{
     private boolean start = false;
     private boolean gameover = false;
 
-    Font fscore = getFont("PressStart2P.ttf",25);
+    Font fscore = getFont("m39.TTF",18);
     Font fmenu = getFont("triple_dot_digital-7.ttf",70);
     Font fgameover = getFont("triple_dot_digital-7.ttf",70);
-    Font fscoreover = getFont("PressStart2P.ttf",25);
-    Font fmenu2 = getFont("PressStart2P.ttf",25);
-    Font fmenu3 = getFont("PressStart2P.ttf",12);
+    Font fscoreover = getFont("m39.TTF",25);
+    Font fmenu2 = getFont("m39.TTF",20);
+    Font fmenu3 = getFont("m39.TTF",8);
 
 
     //declaring the main elements !!! IMPORTANT !!!
@@ -27,13 +30,15 @@ public class Game extends JPanel{
     Grid world;
 
     //variables for the menu
-    int x=225;
+    int x=0;
     int dx=-2;
     
     //variables for score
     private long startTime;
     private String endTime;
     private int score;
+
+    ArrayList <Particles> cool = new ArrayList<Particles>();
 
 
     public Game(){
@@ -45,25 +50,24 @@ public class Game extends JPanel{
          //********** JPANEL SPECIFICS ***********
          setLayout(null);//designates that the JPanel has no layout and allows us to align elements within it using (x,y)
          setSize(GameEngine.DEFAULT_WINDOWSIZEX, GameEngine.DEFAULT_WINDOWSIZEY);//set's the size of our JPanel
-         setBackground(new Color(200,10,0));//sets the background color to...
+         setBackground(Color.black);//sets the background color to...
          setDoubleBuffered(true);//supposed to draw the background as an image and then to the screen in order to improve results, doesn't really
          setVisible(true);}//makes the Jpanel visible
          
          //********** KEY EVENTS ******************
-         
+
          //--------------- A ---------------------
          Action left = new AbstractAction() {
              public void actionPerformed(ActionEvent e) {
-                 System.out.println("Left.");
                  dino.move(-1);
                  A = true;
- 
+
              }
          };
          {
          getInputMap().put(KeyStroke.getKeyStroke("A"),"left");
          getActionMap().put("left", left);
- 
+
          Action leftReleased = new AbstractAction() {
              public void actionPerformed(ActionEvent e) {
                  A = false;
@@ -74,17 +78,15 @@ public class Game extends JPanel{
                  "leftReleased");
          getActionMap().put("leftReleased",
                  leftReleased);
- 
+
          // ---------------- D ---------------------
          Action right = new AbstractAction() {
              public void actionPerformed(ActionEvent e) {
- 
                  D = true;
-                 System.out.println("Right.");
                  dino.move(1);
              }
          };
- 
+
          getInputMap().put(KeyStroke.getKeyStroke("D"),
                  "right");
          getActionMap().put("right",
@@ -94,65 +96,104 @@ public class Game extends JPanel{
                  D = false;
                  if (!A)
                      dino.move(0);
- 
+
              }
          };
          getInputMap().put(KeyStroke.getKeyStroke("released D"),
                  "rightReleased");
          getActionMap().put("rightReleased",
                  rightReleased);
- 
-         // --------------- W -------------------
- 
-         Action up = new AbstractAction() {
-             public void actionPerformed(ActionEvent e) {
-                 dino.jump();
-             }
-         };
-         getInputMap().put(KeyStroke.getKeyStroke("W"),
-                 "up");
-         getActionMap().put("up",
-                 up);
- 
- 
-          // ---------- SPACE ---------------
-         Action space = new AbstractAction() {
-             public void actionPerformed(ActionEvent e) {
- 
-                 if(!start){
-                     start=true;
 
-                    startTime=System.currentTimeMillis();
-                    start();
-                 }else if(!gameover){
-                     dino.jump();
-                 } else {
-                     reset();
-                    startTime=System.currentTimeMillis();
-                     gameover=false;
+
+             // ---------- SPACE ---------------
+             Action space = new AbstractAction() {
+                 public void actionPerformed(ActionEvent e) {
+
+                     if(!start){
+                         start=true;
+                         startTime=System.currentTimeMillis();
+                         start();
+                     }else if(!gameover){
+                         dino.jump();
+                     } else {
+                         reset();
+                         startTime=System.currentTimeMillis();
+                         gameover=false;
+                     }
+
                  }
- 
-             }
-         };
-         getInputMap().put(KeyStroke.getKeyStroke("SPACE"),
-                 "space");
-         getActionMap().put("space",
-                 space);
-                
-        // ---------- ESCAPE ----------     
-        
-        // ----------- ESCAPE ------------
-         Action esc = new AbstractAction() {
-             public void actionPerformed(ActionEvent e) {
-                 start = false;
-                 reset();
-                gameover = false;
-             }
-         };
-         getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"),
-                 "ESC");
-         getActionMap().put("ESC",
-                 esc);
+             };
+             getInputMap().put(KeyStroke.getKeyStroke("SPACE"),
+                     "space");
+             getActionMap().put("space",
+                     space);
+
+             // --------------- W -------------------
+             getInputMap().put(KeyStroke.getKeyStroke("W"),
+                     "up");
+             getActionMap().put("up",
+                     space);
+
+             // ----------- ESCAPE ------------
+             Action esc = new AbstractAction() {
+                 public void actionPerformed(ActionEvent e) {
+                     start = false;
+                     reset();
+                     gameover = false;
+                 }
+             };
+             getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"),
+                     "ESC");
+             getActionMap().put("ESC",
+                     esc);
+
+
+             ////////////////////////// ARROW KEYS ///////////////////////////////////////////////////
+
+             // Left
+                 getInputMap().put(KeyStroke.getKeyStroke("LEFT"),"left");
+                 getActionMap().put("left", left);
+                 getInputMap().put(KeyStroke.getKeyStroke("released LEFT"),
+                         "leftReleased");
+                 getActionMap().put("leftReleased",
+                         leftReleased);
+
+             //Right
+             getInputMap().put(KeyStroke.getKeyStroke("RIGHT"),"right");
+             getActionMap().put("right", right);
+             getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"),
+                     "rightReleased");
+             getActionMap().put("rightReleased",
+                     rightReleased);
+             //UP
+             getInputMap().put(KeyStroke.getKeyStroke("UP"),
+                     "up");
+             getActionMap().put("up",
+                     space);
+
+             ////////////////////////// JIL KEYS ///////////////////////////////////////////////////
+
+             // J
+             getInputMap().put(KeyStroke.getKeyStroke("J"),"left");
+             getActionMap().put("left", left);
+             getInputMap().put(KeyStroke.getKeyStroke("released J"),
+                     "leftReleased");
+             getActionMap().put("leftReleased",
+                     leftReleased);
+
+             //K
+             getInputMap().put(KeyStroke.getKeyStroke("L"),"right");
+             getActionMap().put("right", right);
+             getInputMap().put(KeyStroke.getKeyStroke("released L"),
+                     "rightReleased");
+             getActionMap().put("rightReleased",
+                     rightReleased);
+             //L
+             getInputMap().put(KeyStroke.getKeyStroke("I"),
+                     "up");
+             getActionMap().put("up",
+                     space);
+
 
 }
  
@@ -161,6 +202,18 @@ public class Game extends JPanel{
          if(start&&!gameover){
          dino.update();
          floor.update();
+         /**
+             for(int x=0;x<cool.size();x++){
+             if(!cool.get(x).isalive()){
+                 cool.remove(x);
+                 x--;
+             }
+         }
+
+         if(Math.random()<.2){
+             cool.add(new Particles(Color.red,Math.random()*5,100,100,Math.random()*10,Math.random()*16-8+100,Math.random()*-100+100));
+         }
+          **/
          if(!dino.isAlive()){
              gameover=true;
             endTime = ((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000)));
@@ -221,37 +274,51 @@ public class Game extends JPanel{
  
      public void drawMenu(Graphics g){
 
-         g.setColor(Color.WHITE);
-         g.drawString("v 1.0",900,550);
+         g.setColor(Color.RED);
+         //g.drawString("v 1.0",900,550);
          g.setFont(fmenu);
          g.drawString("DINO", 325, 145);
          g.drawString("APOCALYPSE", 75, 295);
-         if(x<200)
+         g.setColor(Color.WHITE);
+         FontMetrics fm;
+         Rectangle2D rect;
+         g.setFont(fmenu2);
+         fm=g.getFontMetrics();
+         rect=fm.getStringBounds("PRESS SPACE TO START !!!",g);
+         if(x==0)
+             x=(int) ((GameEngine.DEFAULT_WINDOWSIZEX - rect.getWidth())/2);
+         if(x<(int) ((GameEngine.DEFAULT_WINDOWSIZEX - rect.getWidth())/2)-15)
              dx=2;
-         if(x>225)
+         if(x>(int) ((GameEngine.DEFAULT_WINDOWSIZEX - rect.getWidth())/2)+15)
              dx=-2;
          x+=dx;
          
-         g.setFont(fmenu2);
-         g.drawString("PRESS SPACE TO START !!! ",x,400);
+
+         g.drawString("PRESS SPACE TO START !!!",x,400);
          g.setFont(fmenu3);
-         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff",110,550);
+         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff  v1.1",220,550);
     	      }
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
+        /**
+        for(int x=0;x<cool.size();x++){
+            cool.get(x).graphic(g);
+        }
+         **/
                 if(dino.isAlive())
         	         {
                         g.setColor(Color.WHITE);
                 	    g.setFont(fscore);
-        	         	g.drawString(((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000))),445,100);
-        	         }
+                        g.drawString(((((System.currentTimeMillis() - startTime) / 1000) + "." + ((System.currentTimeMillis() - startTime) % 1000))), 445, 50);//445,100
+                     }
 
     }
     public void drawEnd(Graphics g){
         g.setFont(fgameover);
-        g.setColor(Color.WHITE);
+        g.setColor(Color.RED);
         g.drawString("YOU ARE",230,180);
         g.drawString("EXTINCT",230,300);
+        g.setColor(Color.WHITE);
         g.setFont(fscoreover);
         g.drawString("SCORE:" + endTime + " sec",335,390);
         g.drawString("PRESS SPACE TO RESTART" ,250, 440);

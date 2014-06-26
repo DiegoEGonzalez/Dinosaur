@@ -69,6 +69,7 @@ public abstract class Enemy{
             alive=false;
         //checks if it hit the dinosaur
         dino.hit();
+
     }
     public void draw(Graphics g){
         g.drawImage(img,x*10-200,y*10-200,null);
