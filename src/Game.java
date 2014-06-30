@@ -28,6 +28,7 @@ public class Game extends JPanel{
     test dino;
     Stage1 floor;
     Grid world;
+    FX sfx = new FX();
 
     //variables for the menu
     int x=0;
@@ -38,13 +39,11 @@ public class Game extends JPanel{
     private String endTime;
     private int score;
 
-    ArrayList <Particles> cool = new ArrayList<Particles>();
-
 
     public Game(){
     	 world=new Grid();//creates a Grid named world
          dino = new test(world);//creates a Dinosaur named dino giving it the grid
-         floor=new Stage1(world,dino);//creates a World named floor giving it the grid
+         floor=new Stage1(world,dino,sfx);//creates a World named floor giving it the grid
  
  
          //********** JPANEL SPECIFICS ***********
@@ -202,18 +201,7 @@ public class Game extends JPanel{
          if(start&&!gameover){
          dino.update();
          floor.update();
-         /**
-             for(int x=0;x<cool.size();x++){
-             if(!cool.get(x).isalive()){
-                 cool.remove(x);
-                 x--;
-             }
-         }
-
-         if(Math.random()<.2){
-             cool.add(new Particles(Color.red,Math.random()*5,100,100,Math.random()*10,Math.random()*16-8+100,Math.random()*-100+100));
-         }
-          **/
+         sfx.update();
          if(!dino.isAlive()){
              gameover=true;
             endTime = ((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000)));
@@ -221,7 +209,6 @@ public class Game extends JPanel{
          }
      }
      public void start(){
-
     	startTime=System.currentTimeMillis();
      }
      public void reset(){
@@ -238,12 +225,12 @@ public class Game extends JPanel{
              floor.spawnTerrain();// spawns Terrain to fill the floor
          }
          floor.choices=14;
+         sfx.reset();
  
      }
      public void paintComponent(Graphics g){
          super.paintComponent(g);//clears the display
 
- 
          if(!start)
          drawMenu(g);
          else
@@ -251,9 +238,6 @@ public class Game extends JPanel{
 
          if(gameover)
              drawEnd(g);
-
-
-
      }
      public Font getFont(String name, int size){
          Font font = null;
@@ -296,22 +280,18 @@ public class Game extends JPanel{
 
          g.drawString("PRESS SPACE TO START !!!",x,400);
          g.setFont(fmenu3);
-         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff  v1.1",220,550);
-    	      }
+         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff  v1.3",220,550);
+     }
+
     public void drawGame(Graphics g){
         floor.draw(g); //draws the world
-        /**
-        for(int x=0;x<cool.size();x++){
-            cool.get(x).graphic(g);
-        }
-         **/
+
                 if(dino.isAlive())
         	         {
                         g.setColor(Color.WHITE);
                 	    g.setFont(fscore);
                         g.drawString(((((System.currentTimeMillis() - startTime) / 1000) + "." + ((System.currentTimeMillis() - startTime) % 1000))), 445, 50);//445,100
                      }
-
     }
     public void drawEnd(Graphics g){
         g.setFont(fgameover);

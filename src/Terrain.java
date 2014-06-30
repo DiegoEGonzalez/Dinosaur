@@ -12,6 +12,7 @@ public abstract class Terrain{
   int w;
   BufferedImage img = null;
   Grid world=null;
+  int id=0;
 
   public Terrain(Grid world, String location,int x, int y) {
       this.x=x;
@@ -31,21 +32,36 @@ public abstract class Terrain{
   }
 
   public void addToWorld(){
-     world.getBack()[y][x]=2;
-     for(int y=this.y;y<=this.y+h;y++){
-         for(int x=this.x;x<this.x+w;x++){
-             if(collidable)
-             world.getBack()[y][x]=world.objs.indexOf(this)+1; //if it's a positive index then it's collidable
-             else
-             world.getBack()[y][x]=(world.objs.indexOf(this)+1)*-1; //if it's a negative index # then it's not collidable
-         }
-     }
+      world.getBack()[y][x]=collidable?id:id*-1;
+      for(int y=this.y;y<=this.y+h;y++){
+          for(int x=this.x;x<this.x+w;x++){
+              if(collidable)
+                  world.getBack()[y][x]=id; //if it's a positive index then it's collidable
+              else
+                  world.getBack()[y][x]=id*-1; //if it's a negative index # then it's not collidable
+          }
+      }
+
+      world.getBackobjs()[y][x]=this;
+      for(int y=this.y;y<=this.y+h;y++){
+          for(int x=this.x;x<this.x+w;x++){
+              if(collidable)
+                  world.getBackobjs()[y][x]=this; //if it's a positive index then it's collidable
+              else
+                  world.getBackobjs()[y][x]=this; //if it's a negative index # then it's not collidable
+          }
+      }
   }
 
   public void removeFromWorld(){
       for(int y=this.y;y<=this.y+h;y++){
           for(int x=this.x;x<this.x+w;x++){
               world.getBack()[y][x]=0;
+          }
+      }
+      for(int y=this.y;y<=this.y+h;y++){
+          for(int x=this.x;x<this.x+w;x++){
+              world.getBackobjs()[y][x]=null;
           }
       }
   }

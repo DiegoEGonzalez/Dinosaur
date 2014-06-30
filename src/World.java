@@ -9,11 +9,13 @@ public abstract class World {
     ArrayList<Enemy> meteors = new ArrayList<Enemy>();//list of meteors, maybe all the enemies later on but right now only meteors
     Grid world=null;
     Player dino=null;
+    FX sfx = null;
     int choices = 5; //amount of cases
 
-    public World(Grid world,Player dino){
+    public World(Grid world,Player dino, FX sfx){
         this.world=world;//sets world as the Grid
         this.dino=dino;
+        this.sfx=sfx;
         for(int x=0;x<=100;x+=10){
             spawnTerrain();// spawns Terrain to fill the floor
         }
@@ -38,6 +40,30 @@ public abstract class World {
         for(int x=0;x<meteors.size();x++){ //goes through all the meteors
             meteors.get(x).update();//updates them
             if(!meteors.get(x).isAlive()){ //if they're dead, eliminates them.
+                switch (Math.abs(world.getBack()[meteors.get(x).y][meteors.get(x).x])) {
+                    case 1:
+                    for (int z = 0; z < 10; z++) {
+                        double random=Math.random();
+                        if(random<.3)
+                        sfx.create(new Particles(new Color(94,178,56), Math.random() * 3 + 3, (meteors.get(x).x * 10 + Math.random() * meteors.get(x).h * 10) + 5, (meteors.get(x).y-2) * 10, Math.random() * 3.5, 2 + Math.random() * 20 - 10, Math.random() * -5));
+                        else if (random<.6)
+                            sfx.create(new Particles(new Color(0,144,81), Math.random() * 3 + 3, (meteors.get(x).x * 10 + Math.random() * meteors.get(x).h * 10) + 5, (meteors.get(x).y-2) * 10, Math.random() * 3.5, 2 + Math.random() * 20 - 10, Math.random() * -5));
+                        else
+                            sfx.create(new Particles(new Color(66,77,95), Math.random() * 3 + 3, (meteors.get(x).x * 10 + Math.random() * meteors.get(x).h * 10) + 5, meteors.get(x).y * 10, Math.random() * 3.5, 2 + Math.random() * 20 - 10, Math.random() * -5));
+
+                    }
+                    break;
+                    case 2:
+                        for (int z = 0; z < 5; z++) {
+                                sfx.create(new Particles(new Color(125,190,255), Math.random() * 2 + 2, (meteors.get(x).x * 10 + Math.random() * meteors.get(x).h * 10) + 5, (meteors.get(x).y-2) * 10, Math.random() * 5.5, 0, Math.random() * -15));
+                        }
+                        break;
+                    case 3:
+                        for (int z = 0; z < 5; z++) {
+                            sfx.create(new Particles(new Color(255,251,0), Math.random() * 2 + 4, (meteors.get(x).x * 10 + Math.random() * meteors.get(x).h * 10) + 5, (meteors.get(x).y-2) * 10, Math.random() * 5.5, 0, Math.random() * -10));
+                        }
+                        break;
+                }
                 meteors.get(x).remove();
                 meteors.remove(x);
                 x--;
@@ -70,11 +96,11 @@ public abstract class World {
                 if(bottom.size()>0){
                     if((bottom.get(bottom.size()-2) instanceof Water))
                         bottom.add(new Ground(world,bottom.get(bottom.size()-1).x+10));
-                    bottom.add(new Lava(world,bottom.get(bottom.size()-1).x+10));
+                    bottom.add(new Lava(world,bottom.get(bottom.size()-1).x+10,sfx));
                     if(!(bottom.get(bottom.size()-2) instanceof Lava))
-                        bottom.add(new Lava(world,bottom.get(bottom.size()-1).x+10));
+                        bottom.add(new Lava(world,bottom.get(bottom.size()-1).x+10,sfx));
                 }else{
-                    bottom.add(new Lava(world,20));
+                    bottom.add(new Lava(world,20,sfx));
                 }
                 break;
             // 3/14 times, it will generate a water block
@@ -84,12 +110,12 @@ public abstract class World {
                 if(bottom.size()>0){
                     if((bottom.get(bottom.size()-2) instanceof Lava))
                         bottom.add(new Ground(world,bottom.get(bottom.size()-1).x+10));
-                    bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10));
+                    bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10,sfx));
                     if(!(bottom.get(bottom.size()-2) instanceof Water)){
-                        bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10));
+                        bottom.add(new Water(world,bottom.get(bottom.size()-1).x+10,sfx));
                     }
                 }else{
-                    bottom.add(new Water(world,20));
+                    bottom.add(new Water(world,20,sfx));
                 }
                 break;
             //if something goes wrong, just generate a ground block
@@ -105,7 +131,7 @@ public abstract class World {
 
     public void spawnMeteor(){
         //spawns a meteor block ( check x and y, there is a need for a better way to spawn them )
-        meteors.add(new Meteor(world,dino,20+((int)(Math.random()*(GameEngine.DEFAULT_WINDOWSIZEX/10+10)))+2,(int)(Math.random()*20)));
+        meteors.add(new Meteor(world,dino,20+((int)(Math.random()*(GameEngine.DEFAULT_WINDOWSIZEX/10+10)))+2,(int)(Math.random()*20),sfx));
     }
 
     public void draw(Graphics g){
@@ -113,6 +139,7 @@ public abstract class World {
         for(int x=0;x<bottom.size();x++){
             bottom.get(x).draw(g);
         }
+        sfx.draw(g);
         //draws our lil' dinosaur
         dino.draw(g);
         //draws the meteors

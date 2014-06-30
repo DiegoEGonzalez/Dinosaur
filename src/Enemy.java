@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class Enemy{
+    int id=0;
     int x;
     int y;
     int h;
@@ -36,10 +37,10 @@ public abstract class Enemy{
     }
 
     public void addToWorld(){
-        world.getFore()[y][x]=2;
+        world.getFore()[y][x]=id;
         for(int y=this.y;y<=this.y+h;y++){
             for(int x=this.x;x<this.x+w;x++){
-                    world.getFore()[y][x]=world.enems.indexOf(this)+1;
+                    world.getFore()[y][x]=id;
             }
         }
     }

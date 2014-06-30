@@ -15,41 +15,30 @@ public class Particles {
     private Color color;
     private long life;
     private double lifetime;
+    boolean alive;
 
-    public Particles(Color color, double size, double x, double y, double lifetime, double x2, double y2){
+    public Particles(Color color, double size, double x, double y, double lifetime, double deltax, double deltay){
         this.color=color;
         this.x=x;
         this.y=y;
-        this.size=Math.random()*size+3;
-        //setDestination();
+        this.size=size;
         life=System.currentTimeMillis();
-        this.lifetime=Math.random()*lifetime+8;
-        this.x2=x2;
-        this.y2=y2;
-        findSlope();
+        this.lifetime=lifetime;
+        this.deltax=deltax;
+        this.deltay=deltay;
+        alive=true;
     }
 
-    public void graphic(Graphics g){
-        Graphics2D asteroids = (Graphics2D)g;
-        asteroids.setColor(color);
-        move();
-        asteroids.fillRect((int)Math.round(x),(int)Math.round(y),(int)Math.round(size),(int)Math.round(size));
-
+    public void draw(Graphics g){
+        g.setColor(color);
+        g.fillRect((int)Math.round(x)-200,(int)Math.round(y)-200,(int)Math.round(size),(int)Math.round(size));
     }
 
-    public double getSize() {
-        return size;
-    }
-
-    public void move(){
-        x+=deltax;
+    public void update(){
+        x+=deltax- World.speed*10;
         y+=deltay;
-
-    }
-    public void setDestination(){
-        x2=(int)(Math.random()*GameEngine.DEFAULT_WINDOWSIZEX);
-        y2=(int)(Math.random()*GameEngine.DEFAULT_WINDOWSIZEY);
-        findSlope();
+        if((double)Math.abs((life-System.currentTimeMillis())/100)>lifetime)
+            alive=false;
     }
     public void findSlope(){
         double slope = (y-y2)/(x-x2);
@@ -59,21 +48,8 @@ public class Particles {
         deltax=(deltax/distance)*(Math.random()*4);
         deltay=(deltay/distance)*(Math.random()*4);
     }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
     public boolean isalive(){
-        if(Math.abs((life/100)-(System.currentTimeMillis()/100))>lifetime){
-            return false;
-        }   else {
-            return true;
-        }
+       return alive;
     }
 
 }
