@@ -39,6 +39,8 @@ public class Game extends JPanel{
     private String endTime;
     private int score;
 
+    double highscore =0;
+
 
     public Game(){
     	 world=new Grid();//creates a Grid named world
@@ -252,10 +254,6 @@ public class Game extends JPanel{
          }
          return font;
      }
-        
-        
-        		
- 
      public void drawMenu(Graphics g){
 
          g.setColor(Color.RED);
@@ -280,7 +278,7 @@ public class Game extends JPanel{
 
          g.drawString("PRESS SPACE TO START !!!",x,400);
          g.setFont(fmenu3);
-         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff  v1.3",220,550);
+         g.drawString("by: Diego Gonzalez, Mike Roome, Christian Illes and Ben Sentiff  v1.4",220,550);
      }
 
     public void drawGame(Graphics g){
@@ -288,7 +286,11 @@ public class Game extends JPanel{
 
                 if(dino.isAlive())
         	         {
+                        if(Double.parseDouble(((((System.currentTimeMillis()-startTime)/1000) + "." + ((System.currentTimeMillis()-startTime)%1000))))>highscore)
+                           g.setColor(Color.RED);
+                         else
                         g.setColor(Color.WHITE);
+
                 	    g.setFont(fscore);
                         g.drawString(((((System.currentTimeMillis() - startTime) / 1000) + "." + ((System.currentTimeMillis() - startTime) % 1000))), 445, 50);//445,100
                      }
@@ -296,11 +298,21 @@ public class Game extends JPanel{
     public void drawEnd(Graphics g){
         g.setFont(fgameover);
         g.setColor(Color.RED);
-        g.drawString("YOU ARE",230,180);
+        g.drawString("YOU ARE", 230, 180);
         g.drawString("EXTINCT",230,300);
         g.setColor(Color.WHITE);
         g.setFont(fscoreover);
-        g.drawString("SCORE:" + endTime + " sec",335,390);
+        if(Double.parseDouble(endTime)>=highscore)
+        {
+            g.drawString("NEW HIGH SCORE !!!", 315, 390);
+            highscore=Double.parseDouble(endTime);
+        }
+            else
+        {
+            g.drawString("HIGH SCORE: " + highscore, 315, 390);
+        }
+
+        //g.drawString("SCORE:" + endTime,335,430);
         g.drawString("PRESS SPACE TO RESTART" ,250, 440);
     }
 
